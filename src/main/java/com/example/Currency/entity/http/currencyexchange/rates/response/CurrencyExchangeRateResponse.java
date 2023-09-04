@@ -8,10 +8,8 @@ import java.util.ArrayList;
 @Data
 @NoArgsConstructor
 public class CurrencyExchangeRateResponse {
-
     public String table;
     public String currency;
     public String code;
     public ArrayList<CurrencyExchangeRateRate> rates = new ArrayList<>();
-
 }

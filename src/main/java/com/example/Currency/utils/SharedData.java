@@ -6,7 +6,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 @Component
 public class SharedData {
-    private AtomicInteger requestCount = new AtomicInteger(0);
+    private final AtomicInteger requestCount = new AtomicInteger(0);
 
     public void increment() {
         requestCount.incrementAndGet();

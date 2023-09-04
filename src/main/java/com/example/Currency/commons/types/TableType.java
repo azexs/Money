@@ -1,5 +1,5 @@
 package com.example.Currency.commons.types;
 
 public enum TableType {
-    A, B, C;
+    A, B, C
 }

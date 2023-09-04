@@ -12,7 +12,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 @Component
-public class RatesReponseBuilder {
+public class RatesResponseBuilder {
 
 
     public List<RateResponse> buildResponse(Map<String, CurrencyExchangeTableRate> combinedRates, String effectiveDate) {

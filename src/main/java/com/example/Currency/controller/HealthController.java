@@ -1,7 +1,8 @@
 package com.example.Currency.controller;
 
-import com.example.Currency.model.response.HealthStatusReponse;
+import com.example.Currency.model.response.HealthStatusResponse;
 import com.example.Currency.utils.SharedData;
+import lombok.RequiredArgsConstructor;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -9,30 +10,22 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
 @RestController
+@RequiredArgsConstructor
 public class HealthController {
 
     private static final String NBP_TEST_URL = "http://api.nbp.pl/api/exchangerates/tables/A";
 
-    private SharedData sharedData;
-    private RabbitTemplate rabbitTemplate;
-    private RestTemplate restTemplate;
-
-    public HealthController(SharedData sharedData, RabbitTemplate rabbitTemplate, RestTemplate restTemplate) {
-        this.sharedData = sharedData;
-        this.rabbitTemplate = rabbitTemplate;
-        this.restTemplate = restTemplate;
-    }
+    private final SharedData sharedData;
+    private final RabbitTemplate rabbitTemplate;
+    private final RestTemplate restTemplate;
 
     @GetMapping("/health")
-    public HealthStatusReponse getHealthStatus() {
-
-        return HealthStatusReponse.builder()
+    public HealthStatusResponse getHealthStatus() {
+        return HealthStatusResponse.builder()
                 .eventsCount(sharedData.getRequestCount())
                 .rabbitStatus(checkRabbitStatus())
                 .nbpStatus(checkNbpStatus())
                 .build();
-
-
     }
 
     public String checkNbpStatus() {

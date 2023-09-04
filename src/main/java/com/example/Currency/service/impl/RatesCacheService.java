@@ -14,12 +14,15 @@ import java.util.List;
 
 
 @Service(value = "ratesCacheService")
-@CacheConfig(cacheNames = "RatesCache")
+@CacheConfig(cacheNames = "ratesCache")
 public class RatesCacheService implements IRatesService {
 
 
     private final CacheManager cacheManager;
     private final RatesService ratesService;
+
+    private static final String ALL_RATES = "allRates";
+    private static final String ALL_RATES_KEY = "'allRates'";
 
     public RatesCacheService(CacheManager cacheManager,
                              RatesService ratesService) {
@@ -29,7 +32,7 @@ public class RatesCacheService implements IRatesService {
     }
 
     @Override
-    @Cacheable(value = "RatesCache", key = "'allRates'")
+    @Cacheable(value = "ratesCache", key = ALL_RATES_KEY)
     public List<RateResponse> getExchangeRatesList() {
         return ratesService.getExchangeRatesList();
 
@@ -37,7 +40,7 @@ public class RatesCacheService implements IRatesService {
     }
 
     @Override
-    @Cacheable(value = "RatesCache", key = "'rates_' + #date")
+    @Cacheable(value = "ratesCache", key = ALL_RATES_KEY + "+#date")
     public List<RateResponse> getExchangeRatesList(LocalDate publishDate) {
         return ratesService.getExchangeRatesList(publishDate);
     }
@@ -64,27 +67,27 @@ public class RatesCacheService implements IRatesService {
         return rate;
     }
 
-    private List<RateResponse> getRatesFromCache() {
-        Cache ratesCache = cacheManager.getCache("RatesCache");
-        if (ratesCache != null) {
-            Cache.ValueWrapper valueWrapper = ratesCache.get("allRates");
-            if (valueWrapper != null) {
-                return (List<RateResponse>) valueWrapper.get();
-            }
-        }
-        return null;
-    }
-
     private void updateCacheWithRate(RateResponse rateResponse) {
-        Cache ratesCache = cacheManager.getCache("RatesCache");
+        Cache ratesCache = cacheManager.getCache("ratesCache");
         if (ratesCache != null) {
             List<RateResponse> rateResponseList = getRatesFromCache();
             if (rateResponseList == null) {
                 rateResponseList = new ArrayList<>();
             }
             rateResponseList.add(rateResponse);
-            ratesCache.put("allRates", rateResponseList);
+            ratesCache.put(ALL_RATES, rateResponseList);
         }
+    }
+
+    private List<RateResponse> getRatesFromCache() {
+        Cache ratesCache = cacheManager.getCache("ratesCache");
+        if (ratesCache != null) {
+            Cache.ValueWrapper valueWrapper = ratesCache.get(ALL_RATES);
+            if (valueWrapper != null) {
+                return (List<RateResponse>) valueWrapper.get();
+            }
+        }
+        return null;
     }
 }
 

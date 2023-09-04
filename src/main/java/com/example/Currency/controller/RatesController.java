@@ -20,8 +20,8 @@ import java.util.Optional;
 @Validated
 public class RatesController {
 
-    IRatesService ratesService;
-    SharedData sharedData;
+    private final IRatesService ratesService;
+    private final SharedData sharedData;
 
     public RatesController(@Qualifier("ratesCacheService") IRatesService ratesService, SharedData sharedData) {
         this.ratesService = ratesService;
@@ -53,6 +53,4 @@ public class RatesController {
         return rateResponse;
 
     }
-
-
 }

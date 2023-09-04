@@ -1,6 +1,6 @@
 package com.example.Currency.service.impl;
 
-import com.example.Currency.builder.RatesReponseBuilder;
+import com.example.Currency.builder.RatesResponseBuilder;
 import com.example.Currency.entity.http.currencyexchange.AbstractRate;
 import com.example.Currency.entity.http.currencyexchange.rates.response.CurrencyExchangeRateResponse;
 import com.example.Currency.entity.http.currencyexchange.tables.response.CurrencyExchangeTableRate;
@@ -32,12 +32,12 @@ public class RatesService implements IRatesService {
     @Value("${external.exchangerates.api.url}")
     private String url;
 
-    private final RatesReponseBuilder ratesReponseBuilder;
+    private final RatesResponseBuilder ratesResponseBuilder;
     private final HttpClient httpClient;
 
-    public RatesService(RatesReponseBuilder ratesReponseBuilder,
+    public RatesService(RatesResponseBuilder ratesResponseBuilder,
                         HttpClient httpClient) {
-        this.ratesReponseBuilder = ratesReponseBuilder;
+        this.ratesResponseBuilder = ratesResponseBuilder;
         this.httpClient = httpClient;
     }
 
@@ -53,7 +53,7 @@ public class RatesService implements IRatesService {
 
     @Override
     public RateResponse getExchangeRate(String currencyCode) {
-        return ratesReponseBuilder.buildResponse(fetchExchangeRateForCode(currencyCode));
+        return ratesResponseBuilder.buildResponse(fetchExchangeRateForCode(currencyCode));
     }
 
     @Override
@@ -64,7 +64,7 @@ public class RatesService implements IRatesService {
         }
         //rabbitTemplate.convertAndSend(exchange, routingKey, message);
 
-        return ratesReponseBuilder.buildResponse(rate);
+        return ratesResponseBuilder.buildResponse(rate);
     }
 
     private CurrencyExchangeRateResponse fetchExchangeRateForCode(String code) {
@@ -112,7 +112,7 @@ public class RatesService implements IRatesService {
                 }
             }
         }
-        return ratesReponseBuilder.buildResponse(combinedRates, effectiveDate);
+        return ratesResponseBuilder.buildResponse(combinedRates, effectiveDate);
     }
 
     private <T extends AbstractRate> T mergeRates(T rate1, T rate2) {

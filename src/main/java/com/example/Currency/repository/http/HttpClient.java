@@ -2,7 +2,6 @@ package com.example.Currency.repository.http;
 
 import com.example.Currency.entity.http.currencyexchange.rates.response.CurrencyExchangeRateResponse;
 import com.example.Currency.entity.http.currencyexchange.tables.response.CurrencyExchangeTableResponse;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
@@ -16,7 +15,7 @@ public class HttpClient {
 
     private final RestTemplate restTemplate;
 
-    public HttpClient(@Qualifier("nbpRabbitTemplate") RestTemplate restTemplate) {
+    public HttpClient(RestTemplate restTemplate) {
         this.restTemplate = restTemplate;
     }
 
